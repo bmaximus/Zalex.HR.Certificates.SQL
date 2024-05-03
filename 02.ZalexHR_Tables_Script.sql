@@ -1,0 +1,43 @@
+USE [ZalexHR]
+GO
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CertificatePDFs](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[CertificateRequestId] [int] NOT NULL,
+	[Pdf] [nvarchar](max) NOT NULL,
+ CONSTRAINT [PK_CertificatePDFs] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[CertificateRequests](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[AddressTo] [nvarchar](500) NOT NULL,
+	[Purpose] [nvarchar](50) NOT NULL,
+	[IssuedOn] [datetime] NOT NULL,
+	[EmployeeId] [nvarchar](100) NOT NULL,
+	[Status] [int] NOT NULL,
+ CONSTRAINT [PK_CertificateRequests] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[CertificateRequests] ADD  CONSTRAINT [DF_CertificateRequests_Status]  DEFAULT ((0)) FOR [Status]
+GO
+ALTER TABLE [dbo].[CertificatePDFs]  WITH CHECK ADD  CONSTRAINT [FK_CertificatePDFs_CertificateRequests] FOREIGN KEY([CertificateRequestId])
+REFERENCES [dbo].[CertificateRequests] ([Id])
+GO
+ALTER TABLE [dbo].[CertificatePDFs] CHECK CONSTRAINT [FK_CertificatePDFs_CertificateRequests]
+GO
